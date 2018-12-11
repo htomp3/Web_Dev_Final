@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Update{% endblock %}
+{% block content %}
+    <h1>Update</h1>
+
+    <form action="/update/{{ id }}" method="POST">
+        First Name:
+        <input type="text" name="newfname" value="{{ fname }}">
+        Last Name:
+        <input type="text" name="newlname" value="{{ lname }}">
+        User Name:
+        <input type="text" name="newuname" value="{{ uname }}">
+        Password:
+        <input type="text" name="newpassword" value="{{ password }}">
+        <input type="submit">
+    </form>
+
+{% endblock %}

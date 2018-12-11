@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Update{% endblock %}
+{% block content %}
+    <h1>Are you sure you want to delete this entry?</h1>
+    <table>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>User Name</th>
+        <th>Password</th>
+
+            <tr>
+                <td>
+                    {{ fname }}
+                </td>
+                <td>
+                    {{ lname }}
+                </td>
+                <td>
+                    {{ uname }}
+                </td>
+                <td>
+                    {{ password }}
+                </td>
+            </tr>
+
+    </table>
+
+    <form action="/delete/{{ id }}" method="POST">
+        <input type="radio" name="option" value="yes">Yep<br>
+        <input type="radio" name="option" value="no">Nope<br>
+        <input type="submit">
+    </form>
+
+{% endblock %}

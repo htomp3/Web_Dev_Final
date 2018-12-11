@@ -13,10 +13,18 @@ login_manager.init_app(app)
 
 class Client(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(80))
-    lname = db.Column(db.String(80))
-    uname = db.Column(db.String(80))
-    password = db.Column(db.String(80))
+    fname = db.Column(db.String(80), nullable=False)
+    lname = db.Column(db.String(80), nullable=False)
+    uname = db.Column(db.String(80), nullable=False, unique=True)
+    password = db.Column(db.String(80), nullable=False)
+
+
+class Workouts(db.Model,UserMixin):
+    id=db.Column(db.Integer,primary_key=True)
+    day=db.Column(db.String(80))
+    workout=db.Column(db.String(80))
+    weight=db.Column(db.Integer)
+    reps=db.Column(db.Integer)
 
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -48,6 +56,54 @@ def create():
 def read():
     clients = Client.query.all()
     return render_template('read.html', clients=clients)
+
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+
+@app.route('/update/<var>', methods=["GET", "POST"])
+def update(var):
+    if request.method == "GET":
+        print(var)
+        temp = Client.query.filter_by(id=var).first()
+        id = temp.id
+        fname = temp.fname
+        lname = temp.lname
+        uname = temp.uname
+        password = temp.password
+        return render_template('update.html',id=id, fname=fname, lname=lname,uname=uname, password=password)
+
+    if request.method == "POST":
+        print(var)
+        temp = Client.query.filter_by(id=var).first()
+        temp.fname = request.form['newfname']
+        temp.lname = request.form['newlname']
+        temp.uname = request.form['newuname']
+        temp.password = request.form['newpassword']
+        db.session.commit()
+        return redirect('/read')
+
+
+@app.route('/delete/<var>', methods=["GET", "POST"])
+def delete(var):
+    if request.method == "GET":
+        print(var)
+        temp = Client.query.filter_by(id=var).first()
+        id = temp.id
+        fname = temp.fname
+        lname = temp.lname
+        uname = temp.uname
+        password = temp.password
+        return render_template('delete.html', id=id,fname=fname, lname=lname,uname=uname, password=password)
+
+    if request.method == "POST":
+        print(var)
+        temp = Client.query.filter_by(id=var).first()
+        if request.form['option'] == 'yes':
+            db.session.delete(temp)
+            db.session.commit()
+        return redirect('/read')
 
 @login_manager.user_loader
 def load_user(uid):
