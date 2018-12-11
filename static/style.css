@@ -1,0 +1,74 @@
+
+nav {
+    text-align: center;
+    background-color: #404026;
+    color: #ccf2ff;
+    padding: 15px;
+    font-size: xx-large;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 2%;
+}
+
+nav ul li {
+    font-size: 120%;
+    color: #33ccff;
+    display: inline;
+    border: 5px dashed #101623;
+    margin: 2%;
+    text-transform: uppercase;
+}
+
+nav ul li a:hover {
+    background-color: #101623;
+}
+
+nav ul li a:visited, nav ul li a:link {
+    color: #ccf2ff;
+    text-decoration: none;
+}
+
+body{
+    background: #101623;
+    color: #ccf2ff;
+    font-size: large;
+    font-weight: lighter;
+    font-family: monospace;
+    text-align: center;
+}
+
+div#factorlist{
+    width: 250px;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: left;
+}
+
+div#factorlist h2{
+    text-align: center;
+}
+
+table{
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: left;
+}
+
+th{
+    padding: 8px;
+    border: 2px solid #ccf2ff;
+    margin: 10px;
+    font-size: x-large;
+    text-align: center;
+}
+
+td{
+    padding: 32px;
+    border: 1px dotted #ccf2ff;
+    margin: 10px;
+    font-size: large;
+}
