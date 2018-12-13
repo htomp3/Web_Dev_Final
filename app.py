@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import logout_user, login_user, login_required,UserMixin, LoginManager
 
@@ -47,8 +47,8 @@ def create():
         #print(newClient)
         db.session.add(newClient)
         db.session.commit()
-        login_user(newClient)
-        return redirect('/index')
+        #login_user(newClient)
+        return redirect('/login')
     return render_template('create.html')
 
 
@@ -57,9 +57,26 @@ def read():
     clients = Client.query.all()
     return render_template('read.html', clients=clients)
 
-@app.route('/login')
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    if request.method=='POST':
+        uname=request.form['uname']
+        password=request.form['password']
+        client=Client.query.filter_by(uname=uname).first()
+        if client !=None:
+            if password==client.password:
+                login_user(client)
+                flash("You're logged in")
+                return redirect('/index')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
 
 
 @app.route('/update/<var>', methods=["GET", "POST"])
@@ -104,6 +121,7 @@ def delete(var):
             db.session.delete(temp)
             db.session.commit()
         return redirect('/read')
+
 
 @login_manager.user_loader
 def load_user(uid):
