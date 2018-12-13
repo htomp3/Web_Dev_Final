@@ -42,11 +42,13 @@ def create():
         lname = request.form['lname']
         uname = request.form['uname']
         password = request.form['password']
-
-        newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
-        #print(newClient)
-        db.session.add(newClient)
-        db.session.commit()
+        if fname!='' and lname!="" and uname!="" and password!="":
+            newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
+            #print(newClient)
+            db.session.add(newClient)
+            db.session.commit()
+        else:
+            return render_template("logerr.html")
         #login_user(newClient)
         return redirect('/login')
     return render_template('create.html')
@@ -68,7 +70,6 @@ def login():
         if client !=None:
             if password==client.password:
                 login_user(client)
-                flash("You're logged in")
                 return redirect('/index')
     return render_template('login.html')
 
