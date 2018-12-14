@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import logout_user, login_user, login_required,UserMixin, LoginManager
+from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.routing import ValidationError
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SECRET_KEY'] = 'thisisasecretkeyaaaaaaaaaaaaaaa'
@@ -19,12 +21,13 @@ class Client(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
 
 
-class Workouts(db.Model,UserMixin):
-    id=db.Column(db.Integer,primary_key=True)
-    day=db.Column(db.String(80))
-    workout=db.Column(db.String(80))
-    weight=db.Column(db.Integer)
-    reps=db.Column(db.Integer)
+# class Info(db.Model,UserMixin):
+#     id=db.Column(db.Integer,primary_key=True)
+#     bodyweight=db.Column(db.Integer)
+#     # bench=
+#     # squat=
+#     # incline=
+#     # deadlift=
 
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -37,16 +40,19 @@ def index():
 def create():
     if request.form:
         print(request.form)
-
         fname = request.form['fname']
         lname = request.form['lname']
         uname = request.form['uname']
         password = request.form['password']
         if fname!='' and lname!="" and uname!="" and password!="":
             newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
-            #print(newClient)
-            db.session.add(newClient)
-            db.session.commit()
+            user=Client.query.filter_by(uname=uname).first()
+            if user is not None:
+                return render_template("unameError.html")
+            else:
+                #print(newClient)
+                db.session.add(newClient)
+                db.session.commit()
         else:
             return render_template("logerr.html")
         #login_user(newClient)
