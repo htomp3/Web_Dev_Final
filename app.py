@@ -10,22 +10,19 @@ db = SQLAlchemy(app)
 login_manager=LoginManager(app)
 login_manager.init_app(app)
 
-# class Info(db.Model,UserMixin):
-#     id=db.Column(db.Integer,primary_key=True)
-#     bodyweight=db.Column(db.Integer)
-#     bench=db.Column(db.Integer)
-#     squat=db.Column(db.Integer)
-#     incline=db.Column(db.Integer)
-#     deadlift=db.Column(db.Integer)
-#     owner_id=db.Column(db.Integer,db.ForeignKey('client.id'))
-
 class Client(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(80), nullable=False)
     lname = db.Column(db.String(80), nullable=False)
     uname = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
-    #info=db.relationship('Info',backref='owner')
+
+    bodyweight = db.Column(db.Integer, nullable=False)
+    bench = db.Column(db.Integer, nullable=False)
+    squat = db.Column(db.Integer, nullable=False)
+    incline = db.Column(db.Integer, nullable=False)
+    deadlift = db.Column(db.Integer, nullable=False)
+
 
 
 @app.route('/index', methods=['GET', 'POST'])
@@ -43,8 +40,15 @@ def create():
         lname = request.form['lname']
         uname = request.form['uname']
         password = request.form['password']
-        if fname!='' and lname!="" and uname!="" and password!="":
-            newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
+        bodyweight = int(request.form['bodyweight'])
+        bench = int(request.form['bench'])
+        squat = int(request.form['squat'])
+        incline = int(request.form['incline'])
+        deadlift = int(request.form['deadlift'])
+        if fname!='' and lname!="" and uname!="" and password!="" and bodyweight!="" and bench!="" and \
+            squat!="" and incline!="" and deadlift !="" :
+            newClient = Client(fname=fname, lname=lname, uname=uname, password=password,
+                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
             user=Client.query.filter_by(uname=uname).first()
             if user is not None:
                 flash('Username is already taken. Choose another one', 'error')
@@ -63,24 +67,9 @@ def create():
 
 @app.route('/read', methods=["GET"])
 def read():
-    clients = Client.query.all()
+    clients=Client.query.all()
     return render_template('read.html', clients=clients)
 
-# @app.route('/Info', methods=["GET", "POST"])
-# #@login_required
-# def Info():
-#     if request.form:
-#         print(request.form)
-#         bodyweight = int(request.form['bodyweight'])
-#         bench = int(request.form['bench'])
-#         squat = int(request.form['squat'])
-#         incline = int(request.form['incline'])
-#         deadlift=int(request.form['deadlift'])
-#         newInfo=Info(bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
-#         db.session.add(newInfo)
-#         db.session.commit()
-#         return redirect('/read')
-#     return render_template('Info.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -113,7 +102,14 @@ def update(var):
         lname = temp.lname
         uname = temp.uname
         password = temp.password
-        return render_template('update.html',id=id, fname=fname, lname=lname,uname=uname, password=password)
+
+        bodyweight=temp.bodyweight
+        bench=temp.bench
+        squat=temp.squat
+        incline=temp.incline
+        deadlift=temp.deadlift
+        return render_template('update.html',id=id, fname=fname, lname=lname, uname=uname, password=password,
+                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
 
     if request.method == "POST":
         print(var)
@@ -122,6 +118,12 @@ def update(var):
         temp.lname = request.form['newlname']
         temp.uname = request.form['newuname']
         temp.password = request.form['newpassword']
+
+        temp.bodyweight=int(request.form['newbodyweight'])
+        temp.bench = int(request.form['newbench'])
+        temp.squat = int(request.form['newsquat'])
+        temp.incline = int(request.form['newincline'])
+        temp.deadlift = int(request.form['newdeadlift'])
         db.session.commit()
         return redirect('/read')
 
@@ -136,7 +138,14 @@ def delete(var):
         lname = temp.lname
         uname = temp.uname
         password = temp.password
-        return render_template('delete.html', id=id,fname=fname, lname=lname,uname=uname, password=password)
+
+        bodyweight = temp.bodyweight
+        bench = temp.bench
+        squat = temp.squat
+        incline = temp.incline
+        deadlift = temp.deadlift
+        return render_template('delete.html', id=id, fname=fname, lname=lname, uname=uname, password=password,
+                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
 
     if request.method == "POST":
         print(var)

@@ -7,6 +7,12 @@
         <th>Last Name</th>
         <th>User Name</th>
         <th>Password</th>
+        <th>Body Weight</th>
+        <th>Bench</th>
+        <th>Squat</th>
+        <th>Incline</th>
+        <th>Deadlift</th>
+
         {% for client in clients %}
             <tr>
                 <td>
@@ -20,6 +26,21 @@
                 </td>
                 <td>
                     {{ client.password }}
+                </td>
+                <td>
+                    {{ client.bodyweight }}
+                </td>
+                <td>
+                    {{ client.bench }}
+                </td>
+                <td>
+                    {{ client.squat }}
+                </td>
+                <td>
+                    {{ client.incline }}
+                </td>
+                <td>
+                    {{ client.deadlift }}
                 </td>
             <td>
                     <form method="GET" action="/update/{{ client.id }}">
