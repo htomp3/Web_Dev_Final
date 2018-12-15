@@ -47,14 +47,16 @@ def create():
             newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
             user=Client.query.filter_by(uname=uname).first()
             if user is not None:
-                return render_template("unameError.html")
+                flash('Username is already taken. Choose another one', 'error')
+                return redirect('/create')
             else:
                 #print(newClient)
                 db.session.add(newClient)
                 db.session.commit()
 
         else:
-            return render_template("logerr.html")
+            flash('Fields cannot be empty. Enter valid data.', 'error')
+            return redirect('/create')
         return redirect('/login')
     return render_template('create.html')
 
