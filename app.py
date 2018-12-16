@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import logout_user, login_user, login_required,UserMixin, LoginManager
+from flask_login import logout_user, login_user, login_required, UserMixin, LoginManager, current_user
 
 app = Flask(__name__,static_url_path='/static')
 app.config['SECRET_KEY'] = 'thisisasecretkeyaaaaaaaaaaaaaaa'
@@ -61,6 +61,7 @@ def create():
         else:
             flash('Fields cannot be empty. Enter valid data.', 'error')
             return redirect('/create')
+        flash('You have successfully created an account and can login!')
         return redirect('/login')
     return render_template('create.html')
 
@@ -81,7 +82,7 @@ def login():
             flash('Username or Password is invalid', 'error')
             return redirect('/login')
         login_user(client)
-        return render_template('read.html')
+        return redirect('/profile')
     return render_template('login.html')
 
 
@@ -125,7 +126,7 @@ def update(var):
         temp.incline = int(request.form['newincline'])
         temp.deadlift = int(request.form['newdeadlift'])
         db.session.commit()
-        return redirect('/read')
+        return redirect('/profile')
 
 
 @app.route('/delete/<var>', methods=["GET", "POST"])
@@ -155,6 +156,12 @@ def delete(var):
             db.session.commit()
         return redirect('/read')
 
+@app.route('/profile')
+@login_required
+def profile():
+    uname=current_user
+    client = Client.query.filter_by(uname=uname.uname).first()
+    return render_template('profile.html', client=client)
 
 @login_manager.user_loader
 def load_user(uid):

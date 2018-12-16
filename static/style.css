@@ -39,18 +39,6 @@ body{
     text-align: center;
 }
 
-div#factorlist{
-    width: 250px;
-    padding: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: left;
-}
-
-div#factorlist h2{
-    text-align: center;
-}
-
 table{
     padding: 10px;
     margin-right: auto;
@@ -67,7 +55,7 @@ th{
 }
 
 td{
-    padding: 32px;
+    padding: 16px;
     border: 1px dotted #ccf2ff;
     margin: 10px;
     font-size: large;
