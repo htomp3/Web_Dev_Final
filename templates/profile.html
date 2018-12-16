@@ -56,7 +56,15 @@
         {% endif %}
     </table>
 
-
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <h3>{{ message }}</h3>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
 
 {% endblock %}

@@ -20,19 +20,12 @@
 <body>
 <script>
         var index=0;
-        var i=0;
         function change(img) {
             var arr=["/static/Arnold.jpg", "/static/Ed.jpg", "/static/Arnold2.jpeg", "/static/frank.jpg",
                 "/static/Arnold3.jpg", "/static/Serge.jpg", "/static/Arnold4.jpg"];
             index++;
             index=index%7;
             img.src=arr[index];
-        }
-        function changeColor(parx) {
-            colors=['red', 'blue', 'pink','black','green'];
-            i++;
-            i=i%5;
-            parx.style="color:"+colors[i];
         }
     </script>
     <br>

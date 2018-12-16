@@ -109,6 +109,7 @@ def update(var):
         squat=temp.squat
         incline=temp.incline
         deadlift=temp.deadlift
+        flash('Account successfully updated')
         return render_template('update.html',id=id, fname=fname, lname=lname, uname=uname, password=password,
                                bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
 
@@ -126,6 +127,7 @@ def update(var):
         temp.incline = int(request.form['newincline'])
         temp.deadlift = int(request.form['newdeadlift'])
         db.session.commit()
+        flash('Account successfully updated')
         return redirect('/profile')
 
 
@@ -154,7 +156,8 @@ def delete(var):
         if request.form['option'] == 'yes':
             db.session.delete(temp)
             db.session.commit()
-        return redirect('/read')
+            flash('Account successfully deleted')
+        return redirect('/login')
 
 @app.route('/profile')
 @login_required
