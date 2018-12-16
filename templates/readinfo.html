@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Read{% endblock %}
+{% block content %}
+    <h1>One Rep Maxes</h1>
+    <table>
+        <th>Body Weight</th>
+        <th>Bench (ORM)</th>
+        <th>Squat (ORM)</th>
+        <th>Incline (ORM)</th>
+        <th>Deadlift (ORM)</th>
+        {% if workout %}
+            <tr>
+                <td>
+                    {{ workout.bodyweight }}
+                </td>
+                <td>
+                    {{ workout.bench }}
+                </td>
+                <td>
+                    {{ workout.squat }}
+                </td>
+                <td>
+                    {{ workout.incline }}
+                </td>
+                <td>
+                    {{ workout.deadlift }}
+                </td>
+{#                <td>#}
+{#                    <form method="GET" action="/update/{{ client.id }}">#}
+{#                        <input type="submit" value="UPDATE">#}
+{#                    </form>#}
+{#                </td>#}
+{#                <td>#}
+{#                    <form method="GET" action="/delete/{{ client.id }}">#}
+{#                        <input type="submit" value="DELETE">#}
+{#                    </form>#}
+{#                </td>#}
+            </tr>
+        {% endif %}
+    </table>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <h3>{{ message }}</h3>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+{% endblock %}

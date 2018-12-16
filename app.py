@@ -167,6 +167,13 @@ def profile():
     client = Client.query.filter_by(uname=uname.uname).first()
     return render_template('profile.html', client=client)
 
+@app.route('/readinfo')
+@login_required
+def readinfo():
+    uname=current_user
+    workout = Workout.query.filter_by(id=uname.id).first()
+    return render_template('readinfo.html', workout=workout)
+
 @login_manager.user_loader
 def load_user(uid):
     return Client.query.get(uid)
