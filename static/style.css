@@ -1,41 +1,54 @@
-
-nav {
-    text-align: center;
-    background-color: #404026;
-    color: #ccf2ff;
-    padding: 15px;
-    font-size: xx-large;
-}
-
-nav ul {
+ul{
     list-style-type: none;
-    margin: 2%;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    background-color: lightgray;
+    height: auto;
+    position: fixed;
+    overflow: auto;
 }
 
-nav ul li {
-    font-size: 120%;
-    color: #33ccff;
-    display: inline;
-    border: 5px dashed #101623;
-    margin: 2%;
-    text-transform: uppercase;
-}
-
-nav ul li a:hover {
-    background-color: #101623;
-}
-
-nav ul li a:visited, nav ul li a:link {
-    color: #ccf2ff;
+li a {
+    color: black;
+    padding: 8px 16px;
+    display: block;
     text-decoration: none;
 }
 
+li{
+    font-size: larger;
+    text-align: center;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+li a:hover {
+    background-color: red;
+    color: white;
+}
+
 body{
-    background: #101623;
-    color: #ccf2ff;
+    padding-left: 10px;
+    background: whitesmoke;
+    color: black;
     font-size: large;
     font-weight: lighter;
     font-family: monospace;
+    text-align: center;
+}
+
+div#factorlist{
+    width: 250px;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: left;
+}
+
+div#factorlist h2{
     text-align: center;
 }
 
@@ -48,15 +61,15 @@ table{
 
 th{
     padding: 8px;
-    border: 2px solid #ccf2ff;
+    border: 2px solid black;
     margin: 10px;
     font-size: x-large;
     text-align: center;
 }
 
 td{
-    padding: 16px;
-    border: 1px dotted #ccf2ff;
+    padding: 32px;
+    border: 1px dotted black;
     margin: 10px;
     font-size: large;
 }

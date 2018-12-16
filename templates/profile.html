@@ -5,14 +5,8 @@
     <table>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Body Weight</th>
-        <th>Bench</th>
-        <th>Squat</th>
-        <th>Incline</th>
-        <th>Deadlift</th>
         <th>User Name</th>
         <th>Password</th>
-
         {% if client %}
             <tr>
                 <td>
@@ -20,21 +14,6 @@
                 </td>
                 <td>
                     {{ client.lname }}
-                </td>
-                <td>
-                    {{ client.bodyweight }}
-                </td>
-                <td>
-                    {{ client.bench }}
-                </td>
-                <td>
-                    {{ client.squat }}
-                </td>
-                <td>
-                    {{ client.incline }}
-                </td>
-                <td>
-                    {{ client.deadlift }}
                 </td>
                 <td>
                     {{ client.uname }}

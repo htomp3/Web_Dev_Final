@@ -10,18 +10,26 @@ db = SQLAlchemy(app)
 login_manager=LoginManager(app)
 login_manager.init_app(app)
 
-class Client(db.Model,UserMixin):
+class Client(db.Model,UserMixin):#owner
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(80), nullable=False)
     lname = db.Column(db.String(80), nullable=False)
     uname = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
+    workouts = db.relationship('Workout', backref='client')
+
+
+class Workout(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
     bodyweight = db.Column(db.Integer, nullable=False)
     bench = db.Column(db.Integer, nullable=False)
     squat = db.Column(db.Integer, nullable=False)
     incline = db.Column(db.Integer, nullable=False)
     deadlift = db.Column(db.Integer, nullable=False)
+
+    workout_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+
 
 
 
@@ -40,15 +48,8 @@ def create():
         lname = request.form['lname']
         uname = request.form['uname']
         password = request.form['password']
-        bodyweight = int(request.form['bodyweight'])
-        bench = int(request.form['bench'])
-        squat = int(request.form['squat'])
-        incline = int(request.form['incline'])
-        deadlift = int(request.form['deadlift'])
-        if fname!='' and lname!="" and uname!="" and password!="" and bodyweight!="" and bench!="" and \
-            squat!="" and incline!="" and deadlift !="" :
-            newClient = Client(fname=fname, lname=lname, uname=uname, password=password,
-                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+        if fname!='' and lname!="" and uname!="" and password!="" :
+            newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
             user=Client.query.filter_by(uname=uname).first()
             if user is not None:
                 flash('Username is already taken. Choose another one', 'error')
@@ -86,6 +87,25 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/info', methods=['GET', 'POST'])
+@login_required
+def info():
+    user=current_user
+    if request.form:
+        print(request.form)
+        bodyweight = int(request.form['bodyweight'])
+        bench = int(request.form['bench'])
+        squat = int(request.form['squat'])
+        incline = int(request.form['incline'])
+        deadlift = int(request.form['deadlift'])
+
+        clientInfo = Workout(bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+        clientInfo.client=user
+        db.session.add(clientInfo)
+        db.session.commit()
+        return render_template('info.html')
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -103,15 +123,8 @@ def update(var):
         lname = temp.lname
         uname = temp.uname
         password = temp.password
-
-        bodyweight=temp.bodyweight
-        bench=temp.bench
-        squat=temp.squat
-        incline=temp.incline
-        deadlift=temp.deadlift
         flash('Account successfully updated')
-        return render_template('update.html',id=id, fname=fname, lname=lname, uname=uname, password=password,
-                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+        return render_template('update.html',id=id, fname=fname, lname=lname, uname=uname, password=password)
 
     if request.method == "POST":
         print(var)
@@ -121,13 +134,7 @@ def update(var):
         temp.uname = request.form['newuname']
         temp.password = request.form['newpassword']
 
-        temp.bodyweight=int(request.form['newbodyweight'])
-        temp.bench = int(request.form['newbench'])
-        temp.squat = int(request.form['newsquat'])
-        temp.incline = int(request.form['newincline'])
-        temp.deadlift = int(request.form['newdeadlift'])
         db.session.commit()
-        flash('Account successfully updated')
         return redirect('/profile')
 
 
@@ -142,13 +149,7 @@ def delete(var):
         uname = temp.uname
         password = temp.password
 
-        bodyweight = temp.bodyweight
-        bench = temp.bench
-        squat = temp.squat
-        incline = temp.incline
-        deadlift = temp.deadlift
-        return render_template('delete.html', id=id, fname=fname, lname=lname, uname=uname, password=password,
-                               bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+        return render_template('delete.html', id=id, fname=fname, lname=lname, uname=uname, password=password)
 
     if request.method == "POST":
         print(var)
@@ -157,7 +158,7 @@ def delete(var):
             db.session.delete(temp)
             db.session.commit()
             flash('Account successfully deleted')
-        return redirect('/login')
+        return redirect('/profile')
 
 @app.route('/profile')
 @login_required
@@ -169,6 +170,11 @@ def profile():
 @login_manager.user_loader
 def load_user(uid):
     return Client.query.get(uid)
+
+@app.errorhandler(404)
+def err404(err):
+    return render_template('error.html',err=err)
+
 
 if __name__ == '__main__':
     app.run()
