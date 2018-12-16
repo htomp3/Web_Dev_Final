@@ -103,7 +103,7 @@ def info():
         clientInfo.client=user
         db.session.add(clientInfo)
         db.session.commit()
-        return render_template('info.html')
+    return render_template('info.html')
 
 
 @app.route('/logout')
