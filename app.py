@@ -158,11 +158,15 @@ def delete(var):
     if request.method == "POST":
         print(var)
         temp = Client.query.filter_by(id=var).first()
+        temp2=Workout.query.filter_by(id=var).first()
         if request.form['option'] == 'yes':
             db.session.delete(temp)
+            db.session.delete(temp2)
             db.session.commit()
             flash('Account successfully deleted')
-        return redirect('/login')
+            return redirect('/login')
+        flash('Hell yeah brother, keep getting those gains')
+        return redirect('/profile')
 
 @app.route('/profile')
 @login_required
