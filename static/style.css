@@ -1,33 +1,31 @@
-ul{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    width: 20%;
-    background-color: lightgray;
-    height: auto;
-    position: fixed;
-    overflow: auto;
-}
-
-li a {
-    color: black;
-    padding: 8px 16px;
-    display: block;
-    text-decoration: none;
-}
-
-li{
-    font-size: larger;
+nav {
     text-align: center;
+    background-color: gray;
+    color: black;
+    padding: 15px;
+    font-size: xx-large;
 }
 
-li:last-child {
-  border-bottom: none;
+nav ul {
+    list-style-type: none;
+    margin: 2%;
 }
 
-li a:hover {
-    background-color: red;
-    color: white;
+nav ul li {
+    font-size: 120%;
+    color: red;
+    display: inline;
+    margin: 2%;
+    text-transform: uppercase;
+}
+
+nav ul li a:hover {
+    background-color: dodgerblue;
+}
+
+nav ul li a:visited, nav ul li a:link {
+    color: black;
+    text-decoration: none;
 }
 
 body{
@@ -37,18 +35,6 @@ body{
     font-size: large;
     font-weight: lighter;
     font-family: monospace;
-    text-align: center;
-}
-
-div#factorlist{
-    width: 250px;
-    padding: 10px;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: left;
-}
-
-div#factorlist h2{
     text-align: center;
 }
 

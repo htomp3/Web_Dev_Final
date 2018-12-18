@@ -83,6 +83,7 @@ def login():
             flash('Username or Password is invalid', 'error')
             return redirect('/login')
         login_user(client)
+        flash('Successfully logged in')
         return redirect('/profile')
     return render_template('login.html')
 
@@ -103,6 +104,8 @@ def info():
         clientInfo.client=user
         db.session.add(clientInfo)
         db.session.commit()
+        flash('Your One Rep Maxes have been logged!')
+        return redirect('/readinfo')
     return render_template('info.html')
 
 
@@ -110,6 +113,7 @@ def info():
 @login_required
 def logout():
     logout_user()
+    flash('You have logged out. Come back soon.')
     return redirect('/login')
 
 
@@ -158,7 +162,7 @@ def delete(var):
             db.session.delete(temp)
             db.session.commit()
             flash('Account successfully deleted')
-        return redirect('/profile')
+        return redirect('/login')
 
 @app.route('/profile')
 @login_required
@@ -174,12 +178,65 @@ def readinfo():
     workout = Workout.query.filter_by(id=uname.id).first()
     return render_template('readinfo.html', workout=workout)
 
+@app.route('/updateinfo/<var>', methods=["GET", "POST"])
+def updateinfo(var):
+    if request.method == "GET":
+        print(var)
+        temp = Workout.query.filter_by(id=var).first()
+        id = temp.id
+        bodyweight = temp.bodyweight
+        bench = temp.bench
+        squat = temp.squat
+        incline = temp.incline
+        deadlift=temp.deadlift
+        flash('Hell yeah, log that progress brother!')
+        return render_template('updateinfo.html',id=id, bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+
+    if request.method == "POST":
+        print(var)
+        temp = Workout.query.filter_by(id=var).first()
+        temp.bodyweight = int(request.form['newbodyweight'])
+        temp.bench = int(request.form['newbench'])
+        temp.squat = int(request.form['newsquat'])
+        temp.incline = int(request.form['newincline'])
+        temp.deadlift=int(request.form['newdeadlift'])
+
+        db.session.commit()
+        return redirect('/readinfo')
+
+
+@app.route('/deleteinfo/<var>', methods=["GET", "POST"])
+def deleteinfo(var):
+    if request.method == "GET":
+        print(var)
+        temp = Workout.query.filter_by(id=var).first()
+        id = temp.id
+        bodyweight = temp.bodyweight
+        bench = temp.bench
+        squat = temp.squat
+        incline = temp.incline
+        deadlift=temp.deadlift
+        return render_template('deleteinfo.html', id=id, bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+
+    if request.method == "POST":
+        print(var)
+        temp = Workout.query.filter_by(id=var).first()
+        if request.form['option'] == 'yes':
+            db.session.delete(temp)
+            db.session.commit()
+            flash('Account successfully deleted')
+        return redirect('/profile')
+
 @login_manager.user_loader
 def load_user(uid):
     return Client.query.get(uid)
 
 @app.errorhandler(404)
 def err404(err):
+    return render_template('error.html',err=err)
+
+@app.errorhandler(401)
+def err401(err):
     return render_template('error.html',err=err)
 
 

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Update{% endblock %}
+{% block content %}
+    <h1>Update ORM</h1>
+
+    <form action="/updateinfo/{{ id }}" method="POST">
+        Body Weight:
+        <input type="number" name="newbodyweight" value="{{ bodyweight }}"><br>
+        Bench:
+        <input type="number" name="newbench" value="{{ bench }}"><br>
+        Squat:
+        <input type="number" name="newsquat" value="{{ squat }}"><br>
+        Incline:
+        <input type="number" name="newincline" value="{{ incline }}"><br>
+        Deadlift:
+        <input type="number" name="newdeadlift" value="{{ deadlift }}"><br>
+        <input type="submit">
+    </form>
+
+
+
+{% endblock %}

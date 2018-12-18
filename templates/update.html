@@ -2,7 +2,6 @@
 {% block title %}Update{% endblock %}
 {% block content %}
     <h1>Update</h1>
-
     <form action="/update/{{ id }}" method="POST">
         First Name:
         <input type="text" name="newfname" value="{{ fname }}"><br>
