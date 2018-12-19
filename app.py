@@ -48,20 +48,15 @@ def create():
         lname = request.form['lname']
         uname = request.form['uname']
         password = request.form['password']
-        if fname!='' and lname!="" and uname!="" and password!="" :
-            newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
-            user=Client.query.filter_by(uname=uname).first()
-            if user is not None:
-                flash('Username is already taken. Choose another one', 'error')
-                return redirect('/create')
-            else:
-                #print(newClient)
-                db.session.add(newClient)
-                db.session.commit()
-
-        else:
-            flash('Fields cannot be empty. Enter valid data.', 'error')
+        newClient = Client(fname=fname, lname=lname, uname=uname, password=password)
+        user=Client.query.filter_by(uname=uname).first()
+        if user is not None:
+            flash('Username is already taken. Choose another one', 'error')
             return redirect('/create')
+        else:
+            #print(newClient)
+            db.session.add(newClient)
+            db.session.commit()
         flash('You have successfully created an account and can login!')
         return redirect('/login')
     return render_template('create.html')
@@ -80,7 +75,7 @@ def login():
         password=request.form['password']
         client=Client.query.filter_by(uname=uname,password=password).first()
         if client is None:
-            flash('Username or Password is invalid', 'error')
+            flash('Username or Password is invalid')
             return redirect('/login')
         login_user(client)
         flash('Successfully logged in')
@@ -106,6 +101,9 @@ def info():
             db.session.add(clientInfo)
             db.session.commit()
             flash('Your One Rep Maxes have been logged!')
+        else:
+            flash('You must enter data greater than 0')
+            return redirect('/info')
         return redirect('/readinfo')
     return render_template('info.html')
 
@@ -128,12 +126,14 @@ def update(var):
         lname = temp.lname
         uname = temp.uname
         password = temp.password
+
         flash('Account successfully updated')
         return render_template('update.html',id=id, fname=fname, lname=lname, uname=uname, password=password)
 
     if request.method == "POST":
         print(var)
         temp = Client.query.filter_by(id=var).first()
+
         temp.fname = request.form['newfname']
         temp.lname = request.form['newlname']
         temp.uname = request.form['newuname']
