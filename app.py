@@ -100,11 +100,12 @@ def info():
         incline = int(request.form['incline'])
         deadlift = int(request.form['deadlift'])
 
-        clientInfo = Workout(bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
-        clientInfo.client=user
-        db.session.add(clientInfo)
-        db.session.commit()
-        flash('Your One Rep Maxes have been logged!')
+        if bodyweight>0 and bench>0 and squat >0 and incline >0 and deadlift >0:
+            clientInfo = Workout(bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
+            clientInfo.client=user
+            db.session.add(clientInfo)
+            db.session.commit()
+            flash('Your One Rep Maxes have been logged!')
         return redirect('/readinfo')
     return render_template('info.html')
 
@@ -158,10 +159,8 @@ def delete(var):
     if request.method == "POST":
         print(var)
         temp = Client.query.filter_by(id=var).first()
-        temp2=Workout.query.filter_by(id=var).first()
         if request.form['option'] == 'yes':
             db.session.delete(temp)
-            db.session.delete(temp2)
             db.session.commit()
             flash('Account successfully deleted')
             return redirect('/login')
@@ -207,29 +206,6 @@ def updateinfo(var):
 
         db.session.commit()
         return redirect('/readinfo')
-
-
-@app.route('/deleteinfo/<var>', methods=["GET", "POST"])
-def deleteinfo(var):
-    if request.method == "GET":
-        print(var)
-        temp = Workout.query.filter_by(id=var).first()
-        id = temp.id
-        bodyweight = temp.bodyweight
-        bench = temp.bench
-        squat = temp.squat
-        incline = temp.incline
-        deadlift=temp.deadlift
-        return render_template('deleteinfo.html', id=id, bodyweight=bodyweight, bench=bench, squat=squat, incline=incline, deadlift=deadlift)
-
-    if request.method == "POST":
-        print(var)
-        temp = Workout.query.filter_by(id=var).first()
-        if request.form['option'] == 'yes':
-            db.session.delete(temp)
-            db.session.commit()
-            flash('Account successfully deleted')
-        return redirect('/profile')
 
 @login_manager.user_loader
 def load_user(uid):
